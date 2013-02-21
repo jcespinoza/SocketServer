@@ -12,3 +12,18 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_pbStart_clicked()
+{
+
+}
+
+void MainWindow::on_pbStop_clicked()
+{
+
+}
+
+void MainWindow::on_pbSendMT_clicked()
+{
+
+}

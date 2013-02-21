@@ -19,6 +19,10 @@ void Server::sendMessage(int cual, QList<QString> lista, QImage img){
 
 }
 
+void Server::newLogMessage(QString){
+
+}
+
 void Server::start(int port){
     if(!server_started){
         if(listen(QHostAddress::Any, port)){
@@ -55,4 +59,8 @@ void Server::newConnection(){
     //connect(con, SIGNAL(newMessage(ConnectionServer*, QString)), this, SLOT(procesarMensaje(ConnectionServer*, QString)));
     //connect signal disconnected eith slot disonnected
     //emit newConexion(
+}
+
+Server::~Server(){
+    this->stop();
 }

@@ -3,15 +3,17 @@
 #include <QTcpServer>
 #include <QByteArray>
 #include <QDataStream>
+#include <QTcpSocket>
+#include <QImage>
 
 class ConnectionServer: public QObject
 {
     Q_OBJECT
 public:
-    explict ConnectionServer(QTcpSocket*);
+    explicit ConnectionServer(QTcpSocket*);
     QTcpSocket* socket;
-    ~ConnectionServer(){ this->socket->deleteLater();}
     QByteArray message;
+    ~ConnectionServer(){ this->socket->deleteLater();}
 private:
     void parseMessage(QString);
 signals:
