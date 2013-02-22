@@ -8,6 +8,7 @@ Server::Server(QObject* parent):QTcpServer(parent)
 }
 
 void Server::sendMessage(int cual, QString message){
+
 }
 
 
@@ -16,10 +17,6 @@ void Server::sendMessage(int cual, QList<QString> lista){
 }
 
 void Server::sendMessage(int cual, QList<QString> lista, QImage img){
-
-}
-
-void Server::newLogMessage(QString){
 
 }
 
@@ -63,4 +60,12 @@ void Server::newConnection(){
 
 Server::~Server(){
     this->stop();
+}
+
+void Server::procesarMensaje(ConnectionServer *, QString){
+
+}
+
+void Server::procesarError(ConnectionServer *, QString, QString){
+
 }

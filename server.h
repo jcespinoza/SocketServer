@@ -4,6 +4,7 @@
 #include "connectionserver.h"
 class Server: public QTcpServer
 {
+    Q_OBJECT
 public:
     explicit Server(QObject* parent=0);
     ~Server();
