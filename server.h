@@ -1,6 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 #include <QTcpServer>
+#include <QImage>
 #include "connectionserver.h"
 class Server: public QTcpServer
 {

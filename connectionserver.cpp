@@ -9,7 +9,11 @@ ConnectionServer::ConnectionServer(QTcpSocket* sock)
 }
 
 void ConnectionServer::parseMessage(QString msg){
-
+    if(msg.startsWith("REQMESSAGE:"))
+    {
+        msg = "REQMESSAGE:" + msg.mid(11);
+        emit newMessage(this,msg);
+    }
 }
 
 void ConnectionServer::recibirDataServer(){
@@ -57,8 +61,7 @@ void ConnectionServer::sendMessage(QString){
     QDataStream out(&block, QIODevice::WriteOnly);
     if (socket->isValid())
     {
-
-        out.setVersion(QDataStream::Qt_4_6);
+        out.setVersion(QDataStream::Qt_5_0);
         out << quint32(0);
         out << quint8('M');
         out << message;
@@ -66,7 +69,6 @@ void ConnectionServer::sendMessage(QString){
         out << quint32(block.size() - sizeof(quint32));
 
         this->socket->write(block);
-
     }
 }
 
