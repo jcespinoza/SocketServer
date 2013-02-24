@@ -70,10 +70,6 @@ void Server::newConnection(){
         return;
     }
         ConnectionServer* con = new ConnectionServer(nextPendingConnection());
-        if(con->socket->peerAddress().toString() == "172.16.2.253" || ){
-            qDebug() << "hacker detected. denying connection";
-            return;
-        }
         qDebug() << "it gets here";
         listaCon.push_back(con);
         connect(con, SIGNAL(newMessage(ConnectionServer*,QString)), this, SLOT(procesarMensaje(ConnectionServer*,QString)));
