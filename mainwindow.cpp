@@ -34,7 +34,6 @@ void MainWindow::on_pbSendMT_clicked()
 {
     if(ui->lwConexions->selectedItems().count() == 1)
         server->sendMessage(ui->lwConexions->currentRow(), ui->teMsgT->toPlainText());
-    qDebug() << ui->teMsgT->toPlainText();
 }
 
 void MainWindow::showNewConnection(QString ip){

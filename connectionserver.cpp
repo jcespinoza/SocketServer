@@ -56,7 +56,7 @@ void ConnectionServer::sendList(QList<QString>){
 
 }
 
-void ConnectionServer::sendMessage(QString){
+void ConnectionServer::sendMessage(QString message){
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     if (socket->isValid())

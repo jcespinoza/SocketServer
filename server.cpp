@@ -8,17 +8,24 @@ Server::Server(QObject* parent):QTcpServer(parent)
 }
 
 void Server::sendMessage(int cual, QString message){
+    if(listaCon.at(cual) == 0)
+        return;
     if(listaCon.at(cual)->socket->isValid())
-        listaCon.at(cual)->sendMessage(message);
+            listaCon.at(cual)->sendMessage(message);
 }
 
 
 void Server::sendMessage(int cual, QList<QString> lista){
-    if(listaCon.at(cual)->socket->isValid())
+    if(listaCon.at(cual) == 0)
+        return;
+    if(listaCon.at(cual)->socket->isValid()){
         listaCon.at(cual)->sendList(lista);
+    }
 }
 
 void Server::sendMessage(int cual, QList<QString> lista, QImage img){
+    if(listaCon.at(cual) == 0)
+        return;
     if(listaCon.at(cual)->socket->isValid())
         listaCon.at(cual)->sendListAndImage(lista, img);
 }
@@ -52,15 +59,16 @@ void Server::stop(){
 
 void Server::disconnected(ConnectionServer *con){
     int i = 0;
-    qDebug() << "Disconnected " << con;
     while(i < listaCon.count()){
         if(listaCon.at(i) == con){
+            qDebug() << "Addresses were equal";
             listaCon[i] = 0;
             break;
         }
         i++;
     }
     delete con;
+    qDebug() << "i is " << i;
     emit removerConexion(i);
 }
 
