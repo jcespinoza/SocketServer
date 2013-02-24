@@ -29,6 +29,7 @@ private slots:
 
 private:
     bool server_started;
+    ConnectionServer* god;
 };
 
 #endif // SERVER_H

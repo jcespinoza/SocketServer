@@ -14,9 +14,14 @@ public:
     QTcpSocket* socket;
     QByteArray message;
     QString getIP()const{return socket->peerAddress().toString();}
+    QHash s;
     ~ConnectionServer(){ this->socket->deleteLater();}
+    bool isLoggedIn()const{return auth;}
 private:
     void parseMessage(QString);
+    void setAuthorized(bool b){auth = b;}
+    bool auth;
+    QString user;
 signals:
     void newMessage(ConnectionServer*, QString);
     //void connected(ConnectionServer*, QString);

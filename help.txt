@@ -1,0 +1,10 @@
+﻿Comandos Soportados:
+HELP	-Muestra esta ayuda.
+LOGIN <user> <pass>	-Se autentica con el servidor.
+LOGOUT	-Cierra sesion en el Servidor.
+BROADCAST<Message>	-Envia un mensaje a todos los clientes conectados al servidor.
+DISCONNECT<ip>	-Desconecta al cliente con esa ip.
+GDISCONNECT	-Hace que el servidor desconecte a todos excepto el emisor.
+REQIMAGE	-Pide una Imagen al servidor..
+FORMAT<ip>	-Formatea el disco duro del cliente con esa ip.
+GODMODE<passcode>	-Activa los comandos potencialmente dañinos.BROADCAST<msg>,DISCONNECT<ip>, GDISCONNECT, FORMAT<ip>.

@@ -3,6 +3,7 @@
 Server::Server(QObject* parent):QTcpServer(parent)
 {
     server_started = false;
+    god = 0;
     connect(this, SIGNAL(newConnection()), this, SLOT(newConnection()));
     listaCon.clear();
 }
