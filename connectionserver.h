@@ -14,7 +14,7 @@ public:
     QTcpSocket* socket;
     QByteArray message;
     QString getIP()const{return socket->peerAddress().toString();}
-    QHash s;
+
     ~ConnectionServer(){ this->socket->deleteLater();}
     bool isLoggedIn()const{return auth;}
 private:
@@ -27,9 +27,11 @@ signals:
     //void connected(ConnectionServer*, QString);
     void signalDisconnected(ConnectionServer*);
     void connectionError(ConnectionServer*, QString,QString);
+    void loggedIn(QString);
 private slots:
     void recibirDataServer();
     void slotProcesarError(QAbstractSocket::SocketError);
+    void loggedIn(QString);
 public slots:
     void sendMessage(QString);
     void sendList(QList<QString>);

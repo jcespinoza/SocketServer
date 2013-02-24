@@ -9,9 +9,17 @@ ConnectionServer::ConnectionServer(QTcpSocket* sock)
 }
 
 void ConnectionServer::parseMessage(QString msg){
+    if(msg.startsWith("LOGOFF") && !isLoggedIn()){
+        setAuthorized(false);
+    }
+    if(msg.startsWith("LOGIN:")){
+        QString m("You are logged in\n\r");
+        qDebug() << "Logged in";
+        sendMessage("you are logged in");
+    }
     if(msg.startsWith("REQMESSAGE:"))
     {
-        msg = "REQMESSAGE:" + msg.mid(11);
+        msg = ":" + msg.mid(11);
         emit newMessage(this,msg);
     }
 }
@@ -52,8 +60,20 @@ void ConnectionServer::sendListAndImage(QList<QString> lista, QImage image){
     }
 }
 
-void ConnectionServer::sendList(QList<QString>){
+void ConnectionServer::sendList(QList<QString> lista){
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    if (socket->isValid())
+    {
+        out.setVersion(QDataStream::Qt_5_0);
+        out << quint32(0);
+        out << quint8('M');
+        out << lista;
+        out.device()->seek(0);
+        out << quint32(block.size() - sizeof(quint32));
 
+        this->socket->write(block);
+    }
 }
 
 void ConnectionServer::sendMessage(QString message){
