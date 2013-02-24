@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
     delete server;
+    delete ui;
 }
 
 void MainWindow::on_pbStart_clicked()
@@ -27,7 +27,9 @@ void MainWindow::on_pbStart_clicked()
 void MainWindow::on_pbStop_clicked()
 {
     server->stop();
+    qDebug() << "Stopped";
     ui->lwConexions->clear();
+    qDebug() << "Cleared List";
 }
 
 void MainWindow::on_pbSendMT_clicked()

@@ -13,6 +13,7 @@ public:
     explicit ConnectionServer(QTcpSocket*);
     QTcpSocket* socket;
     QByteArray message;
+    QString getIP()const{return socket->peerAddress().toString();}
     ~ConnectionServer(){ this->socket->deleteLater();}
 private:
     void parseMessage(QString);

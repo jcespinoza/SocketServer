@@ -46,7 +46,7 @@ void Server::start(int port){
 void Server::stop(){
     if(server_started){
         server_started = false;
-        while(listaCon.isEmpty()){
+        while(!listaCon.isEmpty()){
             ConnectionServer* temp = listaCon.takeFirst();
             //temp->sendMessage("SERVERSTOP");
             if(temp != 0)
@@ -61,14 +61,12 @@ void Server::disconnected(ConnectionServer *con){
     int i = 0;
     while(i < listaCon.count()){
         if(listaCon.at(i) == con){
-            qDebug() << "Addresses were equal";
             listaCon[i] = 0;
             break;
         }
         i++;
     }
     delete con;
-    qDebug() << "i is " << i;
     emit removerConexion(i);
 }
 
@@ -83,8 +81,7 @@ void Server::newConnection(){
         connect(con, SIGNAL(newMessage(ConnectionServer*,QString)), this, SLOT(procesarMensaje(ConnectionServer*,QString)));
         connect(con, SIGNAL(signalDisconnected(ConnectionServer*)), this, SLOT(disconnected(ConnectionServer*)));
         connect(con, SIGNAL(connectionError(ConnectionServer*,QString,QString)), this, SLOT(procesarError(ConnectionServer*,QString,QString)));
-        qDebug() << con->socket->peerAddress().toString();
-        emit nuevaConexion(con->socket->peerAddress().toString());
+        emit nuevaConexion(con->getIP());
 }
 
 Server::~Server(){
