@@ -27,11 +27,12 @@ signals:
     //void connected(ConnectionServer*, QString);
     void signalDisconnected(ConnectionServer*);
     void connectionError(ConnectionServer*, QString,QString);
+    void auth(ConnectionServer*, QString);
     void loggedIn(QString);
 private slots:
     void recibirDataServer();
     void slotProcesarError(QAbstractSocket::SocketError);
-    void loggedIn(QString);
+    //void loggedIn(QString);
 public slots:
     void sendMessage(QString);
     void sendList(QList<QString>);

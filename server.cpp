@@ -96,3 +96,12 @@ void Server::procesarMensaje(ConnectionServer *, QString msg){
 void Server::procesarError(ConnectionServer *, QString title, QString error){
     emit newLogMessage(title + " : " + error);
 }
+
+void Server::validate(ConnectionServer* con, QString user){
+    for(int i = 0; i < listaCon.size(); i++){
+        if(listaCon.at() != 0){
+
+        }
+    }
+    emit con->loggedIn();
+}

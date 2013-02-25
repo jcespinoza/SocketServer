@@ -26,6 +26,7 @@ private slots:
     void newConnection();
     void procesarMensaje(ConnectionServer*, QString);
     void disconnected(ConnectionServer*);
+    void validate(ConnectionServer*, QString);
 
 private:
     bool server_started;

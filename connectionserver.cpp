@@ -15,6 +15,8 @@ void ConnectionServer::parseMessage(QString msg){
     if(msg.startsWith("LOGIN:")){
         QString m("You are logged in\n\r");
         qDebug() << "Logged in";
+        QString u = msg.mid(6, msg.indexOf(":"));
+        emit auth(this, u);
         sendMessage("you are logged in");
     }
     if(msg.startsWith("REQMESSAGE:"))
