@@ -17,6 +17,8 @@ public:
 
     ~ConnectionServer(){ this->socket->deleteLater();}
     bool isLoggedIn()const{return auth;}
+    QString getUser()const{return user;}
+    void setUser(QString);
 private:
     void parseMessage(QString);
     void setAuthorized(bool b){auth = b;}
@@ -27,11 +29,12 @@ signals:
     //void connected(ConnectionServer*, QString);
     void signalDisconnected(ConnectionServer*);
     void connectionError(ConnectionServer*, QString,QString);
-    void auth(ConnectionServer*, QString);
+    void autenticate(ConnectionServer*, QString);
     void loggedIn(QString);
 private slots:
     void recibirDataServer();
     void slotProcesarError(QAbstractSocket::SocketError);
+    void credentialAccepted(QString);
     //void loggedIn(QString);
 public slots:
     void sendMessage(QString);

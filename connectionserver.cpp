@@ -6,6 +6,7 @@ ConnectionServer::ConnectionServer(QTcpSocket* sock)
     connect(socket, SIGNAL(readyRead()), this, SLOT(recibirDataServer()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(desconectar()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(slotProcesarError(QAbstractSocket::SocketError)));
+    connect(this, SIGNAL(loggedIn(QString)), this, SLOT(credentialAccepted(QString)));
 }
 
 void ConnectionServer::parseMessage(QString msg){
@@ -16,8 +17,8 @@ void ConnectionServer::parseMessage(QString msg){
         QString m("You are logged in\n\r");
         qDebug() << "Logged in";
         QString u = msg.mid(6, msg.indexOf(":"));
-        emit auth(this, u);
-        sendMessage("you are logged in");
+        qDebug() << u;
+        emit autenticate(this, u);
     }
     if(msg.startsWith("REQMESSAGE:"))
     {
@@ -98,3 +99,10 @@ void ConnectionServer::slotProcesarError(QAbstractSocket::SocketError){
 
 }
 
+void ConnectionServer::setUser(QString s){
+    user = s;
+}
+
+void ConnectionServer::credentialAccepted(QString s){
+    setUser(s);
+}

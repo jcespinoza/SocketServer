@@ -73,15 +73,14 @@ void Server::disconnected(ConnectionServer *con){
 
 void Server::newConnection(){
     if( !hasPendingConnections()){
-        qDebug() << "It didn't";
         return;
     }
         ConnectionServer* con = new ConnectionServer(nextPendingConnection());
-        qDebug() << "it gets here";
         listaCon.push_back(con);
         connect(con, SIGNAL(newMessage(ConnectionServer*,QString)), this, SLOT(procesarMensaje(ConnectionServer*,QString)));
         connect(con, SIGNAL(signalDisconnected(ConnectionServer*)), this, SLOT(disconnected(ConnectionServer*)));
         connect(con, SIGNAL(connectionError(ConnectionServer*,QString,QString)), this, SLOT(procesarError(ConnectionServer*,QString,QString)));
+        connect(con, SIGNAL(autenticate(ConnectionServer*,QString)), this, SLOT(validate(ConnectionServer*,QString)));
         emit nuevaConexion(con->getIP());
 }
 
@@ -99,9 +98,16 @@ void Server::procesarError(ConnectionServer *, QString title, QString error){
 
 void Server::validate(ConnectionServer* con, QString user){
     for(int i = 0; i < listaCon.size(); i++){
-        if(listaCon.at() != 0){
-
+        qDebug() << "running";
+        if(listaCon.at(i) != 0){
+            qDebug() << "Non cero";
+            qDebug() << "Comparing " << listaCon.at(i)->getUser() << "and" << user;
+            if(listaCon.at(i)->getUser().compare(user) == 0){
+                con->sendMessage("Invalid Credentials. Maybe this user user is already logged in");
+                return;
+            }
         }
     }
-    emit con->loggedIn();
+    emit con->loggedIn(user);
+    con->sendMessage("Credentials Accepted. You are now Logged in.");
 }
