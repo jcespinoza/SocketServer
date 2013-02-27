@@ -83,6 +83,7 @@ void Server::newConnection(){
         connect(con, SIGNAL(autenticate(ConnectionServer*,QString)), this, SLOT(validate(ConnectionServer*,QString)));
         connect(con, SIGNAL(broadCastM(ConnectionServer*,QString)), this, SLOT(broadCastMessage(ConnectionServer*, QString)));
         connect(con, SIGNAL(sendMTo(ConnectionServer*,QString,QString)), this, SLOT(sendMTo(ConnectionServer*,QString,QString)));
+        connect(con, SIGNAL(askList(ConnectionServer*)), this, SLOT(sendList(ConnectionServer*)));
         emit nuevaConexion(con->getIP());
 }
 
@@ -130,4 +131,16 @@ void Server::sendMTo(ConnectionServer *from, QString dest, QString msg){
             return;
         }
     }
+}
+
+void Server::sendList(ConnectionServer* sol){
+    QString list = "Conectados: ";
+    for(int i = 0; i < listaCon.count(); i++){
+        ConnectionServer* temp = listaCon.at(i);
+        if( temp != 0 && temp->isLoggedIn()){
+            list.append(temp->getUser());
+            list.append(",");
+        }
+    }
+    sol->sendMessage(list);
 }

@@ -11,6 +11,7 @@ ConnectionServer::ConnectionServer(QTcpSocket* sock)
 }
 
 void ConnectionServer::parseMessage(QString msg){
+    qDebug() << "Recibiendo " << msg;
     if(msg.startsWith("LOGOFF",Qt::CaseInsensitive) && !isLoggedIn()){
         setAuthorized(false);
         return;
@@ -42,8 +43,16 @@ void ConnectionServer::parseMessage(QString msg){
         sendMessage("You to "+ dest + ": " + mess);
         emit sendMTo(this, dest, mess);
     }
-    if(msg.startsWith("HELP:")){
-
+    if(msg.startsWith("HELP",Qt::CaseInsensitive)){
+        QString comandos = "\nHELP -> Muestra esta ayuda.";
+        comandos.append("\nLOGIN:<user>:<pass> -> Se auntentica en el Servidor.");
+        comandos.append("\n@<user>:<mensaje> -> Envia un mensaje a ese usuario.");
+        comandos.append("\nBCM:<mensaje> -> Envia un mensaje.");
+        comandos.append("\nREQLIST -> Solicita la lista de conectados.\n");
+        sendMessage(comandos);
+    }
+    if(msg.startsWith("REQLIST", Qt::CaseInsensitive)){
+        emit askList(this);
     }
 }
 
@@ -55,7 +64,6 @@ void ConnectionServer::recibirDataServer(){
         parseMessage(message.left(pos + 2));
         message = message.mid(pos+2);
     }
-
 }
 
 void ConnectionServer::desconectar(){

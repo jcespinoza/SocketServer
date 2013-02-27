@@ -30,6 +30,7 @@ private slots:
     void sendMTo(ConnectionServer*, QString, QString);
     void disconnected(ConnectionServer*);
     void validate(ConnectionServer*, QString);
+    void sendList(ConnectionServer*);
 
 private:
     bool server_started;
