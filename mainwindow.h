@@ -23,6 +23,7 @@ private slots:
     void showNewLogMessage(QString);
     void showNewConnection(QString);
     void removerConexion(int);
+    void updateNames();
 
 private:
     Ui::MainWindow *ui;

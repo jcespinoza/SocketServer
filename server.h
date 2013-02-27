@@ -21,10 +21,13 @@ signals:
     void newLogMessage(QString);
     void nuevaConexion(QString);
     void removerConexion(int cual);
+    void updateNames();
 private slots:
     void procesarError(ConnectionServer*, QString, QString);
     void newConnection();
     void procesarMensaje(ConnectionServer*, QString);
+    void broadCastMessage(ConnectionServer*, QString);
+    void sendMTo(ConnectionServer*, QString, QString);
     void disconnected(ConnectionServer*);
     void validate(ConnectionServer*, QString);
 

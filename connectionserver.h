@@ -31,6 +31,8 @@ signals:
     void connectionError(ConnectionServer*, QString,QString);
     void autenticate(ConnectionServer*, QString);
     void loggedIn(QString);
+    void broadCastM(ConnectionServer*, QString);
+    void sendMTo(ConnectionServer*, QString, QString);
 private slots:
     void recibirDataServer();
     void slotProcesarError(QAbstractSocket::SocketError);

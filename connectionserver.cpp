@@ -3,6 +3,7 @@
 ConnectionServer::ConnectionServer(QTcpSocket* sock)
 {
     socket = sock;
+    auth = false;
     connect(socket, SIGNAL(readyRead()), this, SLOT(recibirDataServer()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(desconectar()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(slotProcesarError(QAbstractSocket::SocketError)));
@@ -10,20 +11,39 @@ ConnectionServer::ConnectionServer(QTcpSocket* sock)
 }
 
 void ConnectionServer::parseMessage(QString msg){
-    if(msg.startsWith("LOGOFF") && !isLoggedIn()){
+    if(msg.startsWith("LOGOFF",Qt::CaseInsensitive) && !isLoggedIn()){
         setAuthorized(false);
+        return;
     }
-    if(msg.startsWith("LOGIN:")){
-        QString m("You are logged in\n\r");
-        qDebug() << "Logged in";
-        QString u = msg.mid(6, msg.indexOf(":"));
-        qDebug() << u;
+    if(msg.startsWith("LOGIN:",Qt::CaseInsensitive)){
+        msg = msg.mid(6);
+        QString u = msg.left(msg.lastIndexOf(":"));
         emit autenticate(this, u);
+        return;
     }
-    if(msg.startsWith("REQMESSAGE:"))
+    if(!isLoggedIn()){
+        sendMessage("Man auntenticate!");
+        return;
+    }
+    if(msg.startsWith("REQMESSAGE:",Qt::CaseInsensitive))
     {
         msg = ":" + msg.mid(11);
         emit newMessage(this,msg);
+    }
+    if(msg.startsWith("BCM:",Qt::CaseInsensitive)){
+        msg = msg.mid(4);
+        QString bd = msg.left(msg.size() - 1).trimmed();
+        emit broadCastM(this, bd);
+    }
+    if(msg.startsWith("@")){
+        msg = msg.right(msg.size() - 1);
+        QString dest = msg.left(msg.indexOf(":"));
+        QString mess = msg.mid(dest.size()+1).trimmed();
+        sendMessage("You to "+ dest + ": " + mess);
+        emit sendMTo(this, dest, mess);
+    }
+    if(msg.startsWith("HELP:")){
+
     }
 }
 
@@ -79,7 +99,7 @@ void ConnectionServer::sendList(QList<QString> lista){
     }
 }
 
-void ConnectionServer::sendMessage(QString message){
+void ConnectionServer::sendMessage(QString messag){
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     if (socket->isValid())
@@ -87,7 +107,7 @@ void ConnectionServer::sendMessage(QString message){
         out.setVersion(QDataStream::Qt_5_0);
         out << quint32(0);
         out << quint8('M');
-        out << message;
+        out << messag;
         out.device()->seek(0);
         out << quint32(block.size() - sizeof(quint32));
 
@@ -105,4 +125,5 @@ void ConnectionServer::setUser(QString s){
 
 void ConnectionServer::credentialAccepted(QString s){
     setUser(s);
+    setAuthorized(true);
 }

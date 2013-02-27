@@ -81,6 +81,8 @@ void Server::newConnection(){
         connect(con, SIGNAL(signalDisconnected(ConnectionServer*)), this, SLOT(disconnected(ConnectionServer*)));
         connect(con, SIGNAL(connectionError(ConnectionServer*,QString,QString)), this, SLOT(procesarError(ConnectionServer*,QString,QString)));
         connect(con, SIGNAL(autenticate(ConnectionServer*,QString)), this, SLOT(validate(ConnectionServer*,QString)));
+        connect(con, SIGNAL(broadCastM(ConnectionServer*,QString)), this, SLOT(broadCastMessage(ConnectionServer*, QString)));
+        connect(con, SIGNAL(sendMTo(ConnectionServer*,QString,QString)), this, SLOT(sendMTo(ConnectionServer*,QString,QString)));
         emit nuevaConexion(con->getIP());
 }
 
@@ -97,17 +99,35 @@ void Server::procesarError(ConnectionServer *, QString title, QString error){
 }
 
 void Server::validate(ConnectionServer* con, QString user){
+    if(user.compare("")==0)
+        return;
     for(int i = 0; i < listaCon.size(); i++){
-        qDebug() << "running";
         if(listaCon.at(i) != 0){
-            qDebug() << "Non cero";
-            qDebug() << "Comparing " << listaCon.at(i)->getUser() << "and" << user;
-            if(listaCon.at(i)->getUser().compare(user) == 0){
+            if(listaCon.at(i)->getUser().compare(user, Qt::CaseInsensitive) == 0){
                 con->sendMessage("Invalid Credentials. Maybe this user user is already logged in");
                 return;
             }
         }
     }
     emit con->loggedIn(user);
+    emit updateNames();
     con->sendMessage("Credentials Accepted. You are now Logged in.");
+}
+
+void Server::broadCastMessage(ConnectionServer *owner, QString msg){
+    for(int i = 0; i < listaCon.count(); i++){
+        if(listaCon.at(i) != 0){
+            listaCon.at(i)->sendMessage(owner->getUser() + " says: " + msg);
+        }
+    }
+}
+
+void Server::sendMTo(ConnectionServer *from, QString dest, QString msg){
+    for(int i = 0; i < listaCon.count(); i++){
+        ConnectionServer* temp = listaCon.at(i);
+        if( temp != 0 && temp->getUser().compare(dest,Qt::CaseInsensitive) == 0){
+            temp->sendMessage(from->getUser() + " to you: " + msg);
+            return;
+        }
+    }
 }

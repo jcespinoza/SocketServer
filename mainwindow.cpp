@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(server, SIGNAL(nuevaConexion(QString)), this, SLOT(showNewConnection(QString)));
     connect(server, SIGNAL(newLogMessage(QString)), this, SLOT(showNewLogMessage(QString)));
     connect(server, SIGNAL(removerConexion(int)), this, SLOT(removerConexion(int)));
+    connect(server, SIGNAL(updateNames()), this, SLOT(updateNames()));
 }
 
 MainWindow::~MainWindow()
@@ -50,4 +51,13 @@ void MainWindow::removerConexion(int c){
     ui->teLog->append("Removiendo conexion " + temp);
     ui->lwConexions->item(c)->setText("Disconnected");
     //delete ui->lwConexions->takeItem(c);
+}
+
+void MainWindow::updateNames(){
+    for(int i = 0; i < server->listaCon.count(); i++){
+        ConnectionServer* cs = server->listaCon.at(i);
+        if( cs != 0){
+            ui->lwConexions->item(i)->setText(cs->getUser());
+        }
+    }
 }
